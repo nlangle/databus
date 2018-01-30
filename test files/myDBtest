@@ -1,0 +1,11 @@
+HTTP/1.1 400 Bad Request
+Server: nginx/1.7.9
+Date: Wed, 25 Feb 2015 16:00:37 GMT
+Content-Type: text/plain; charset=utf-8
+Content-Length: 0
+Connection: keep-alive
+Set-Cookie: PLAY_FLASH=; Expires=Wed, 25 Feb 2015 16:00:37 GMT; Path=/
+Set-Cookie: PLAY_ERRORS=; Expires=Wed, 25 Feb 2015 16:00:37 GMT; Path=/
+Set-Cookie: PLAY_SESSION=; Expires=Wed, 25 Feb 2015 16:00:37 GMT; Path=/; HTTPOnly
+Cache-Control: no-cache
+

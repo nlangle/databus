@@ -1,0 +1,184 @@
+raw data = ts
+getdata = rt
+    localhost:9000/api/getdataV1/select+t+from+wideTable+as+t
+csv = ts rt
+json = ts rt
+time range = ts
+date format = ts
+
+spline = ts
+limitderivative = ts
+
+range clean = ts
+
+variability clean = ts (rt doesn't do anything)
+
+
+relational = ts rt
+    https://databus.nrel.gov/api/csv/relational/value2=value*1000/relational/value3=value*.5/rawdataV1/RaTemp
+    localhost:9000/api/relational/energy2=energy*100/getdataV1/select+t+from+wideTable+as+t
+    
+column select = ts rt
+    localhost:9000/api/columnselect/energy,timeStart/getdataV1/select+t+from+wideTable+as+t
+    https://databus.nrel.gov/api/columnselect/time,value/aggregation/RSF_LIGHTING_1M_WIDE/1358868711000/1358955111000
+    
+    You can also use this mod to 'rename' or alias columns:
+    https://databus.nrel.gov/api/columnselect/time as starttime,value as sum/aggregation/RSF_LIGHTING_1M_WIDE/1358868711000/1358955111000
+    
+    -----
+    
+    
+    
+    
+    Ok, you are the first victim of the new dynamic aggregations.  They are as we discussed.
+
+Some examples, from simple (I hope what most people will see), to complex (the urls start to get hard to read…)
+
+First go here and log into databus so you don’t have to keep providing keys for these example links:
+https://databustest.nrel.gov
+
+Ok, first simple.  Just get raw data from N tables (up to 8 for now) for a time range:
+https://databustest.nrel.gov/api/dynamicaggregationpipeV1/rawdataV1/1359814800000/1359874740000?src1=FanSpeed&src2=FanPower&src3=OATemp
+
+{
+"data": [
+{
+"FanPower": 0.4,
+"FanSpeed": 40,
+"OATemp": 71.6044,
+"time": 1359814800000
+},
+{
+"FanPower": 0.4,
+"FanSpeed": 40,
+"OATemp": 71.6044,
+"time": 1359814860000
+},
+…
+
+Pretty easy.  Hopefully that’s all most users will want to do when doing this.
+What this is really doing is building up 3 suburls that look something like 
+…/rawdataV1/FanSpeed/…
+…/rawdataV1/FanPower/…
+…/rawdataV1/OATemp/…
+And running them all.
+
+But, you can do more!  Now apply some logic to all of them:
+https://databustest.nrel.gov/api/dynamicaggregationpipeV1/splinesV2/limitderivative/60000/0/rangecleanV1/-20000000/20000000/rawdataV1/1359814800000/1359874740000?src1=FanSpeed&src2=FanPower&src3=OATemp
+{
+"data": [
+{
+"FanPower": 0.4,
+"FanSpeed": 40,
+"OATemp": 71.6044,
+"time": 1359814860000
+},
+{
+"FanPower": 0.4,
+"FanSpeed": 40,
+"OATemp": 71.6044,
+"time": 1359814920000
+},
+…
+This applies the logic specified in the main url …/splinesV2/limitderivative/60000/0/rangecleanV1/-20000000/20000000/… To all of the parameters specified (still using the parameter specified as the name of the resulting column).
+That makes the ‘suburls’:
+…/splinesV2/limitderivative/60000/0/rangecleanV1/-20000000/20000000/rawdataV1/FanSpeed/…
+…/splinesV2/limitderivative/60000/0/rangecleanV1/-20000000/20000000/rawdataV1/FanPower/…
+…/splinesV2/limitderivative/60000/0/rangecleanV1/-20000000/20000000/rawdataV1/OATemp/…
+
+
+
+Ok, maybe I don’t like the name ‘FanPower’.  Lets name it something different by supplying a srcName parameter:
+https://databustest.nrel.gov/api/dynamicaggregationpipeV1/splinesV2/limitderivative/60000/0/rangecleanV1/-20000000/20000000/rawdataV1/1359814800000/1359874740000?src1=FanSpeed&srcName1=MyFanSpeed&src2=FanPower&src3=OATemp
+{
+"data": [
+{
+"FanPower": 0.4,
+"MyFanSpeed": 40,
+"OATemp": 71.6044,
+"time": 1359814860000
+},
+{
+"FanPower": 0.4,
+"MyFanSpeed": 40,
+"OATemp": 71.6044,
+"time": 1359814920000
+},
+…
+Now the suburls are the same, the names just come out differently.
+
+
+Ok, that makes sense.  How about if we want to do something different for different source tables.  Lets also have 2 sources that are from the same table (FanPower) that are processed differently and named accordingly:
+https://databustest.nrel.gov/api/dynamicaggregationpipeV1/splinesV2/limitderivative/60000/0/rangecleanV1/-20000000/20000000/rawdataV1/1359814800000/1359874740000?srcName1=FanSpeedScaled&src1=multiplyV1/1000/FanSpeed&srcName2=FanPowerCleaned&src2=/rangecleanV1/0/100/FanPower&src3=FanPower&src4=OATemp
+{
+"data": [
+{
+"FanPower": 0.4,
+"FanPowerCleaned": 0.4,
+"FanSpeedScaled": 40000,
+"OATemp": 71.6044,
+"time": 1359814860000
+},
+{
+"FanPower": 0.4,
+"FanPowerCleaned": 0.4,
+"FanSpeedScaled": 40000,
+"OATemp": 71.6044,
+"time": 1359814920000
+},
+…
+
+Now the url is starting to get a little long.  But I imagine it’s pretty rare that users are going to be doing this too deeply.  This applies the ‘main’ url to all of them, then handles each suburl differently, and names them accordingly.  
+The suburls here are:
+…/splinesV2/limitderivative/60000/0/rangecleanV1/-20000000/20000000/multiplyV1/1000/rawdataV1/FanSpeed/…
+…/splinesV2/limitderivative/60000/0/rangecleanV1/-20000000/20000000/rangecleanV1/0/100/rawdataV1/FanPower/…
+…/splinesV2/limitderivative/60000/0/rangecleanV1/-20000000/20000000/rawdataV1/FanPower/…
+…/splinesV2/limitderivative/60000/0/rangecleanV1/-20000000/20000000/rawdataV1/OATemp/…
+
+
+That’s about it.  
+
+One little technical detail:  You’ll notice the url I’m specifying here is ‘dynamicaggregationpipeV1’.  There is also a ‘dynamicaggregationV1’.  
+We have the concept of an ‘aggregation’ that requires values to be time aligned, and an ‘aggregation pipe’ that does not require it.  For graphing 
+Aggregation Pipe is useful because you don’t care if the times are aligned, but for most situations where you will be doing calculations or something 
+you’ll want an ‘aggregation’ where you can be sure the values are aligned.  Either way, if you just run them through something like the spline you see in these examples 
+…/splinesV2/limitderivative/60000/0/… it’ll align them for you.  I use the aggregation pipe for examples so you can see misaligned values for examples 
+even if it might not be useful in the real world for anything but graphing.  You can force it to see the difference by removing the outer spline and inserting 
+a purposely misaligned spline in a sub url:
+
+https://databustest.nrel.gov/api/dynamicaggregationpipeV1/rawdataV1/1359814800000/1359874740000?srcName1=FanSpeed30Second&src1=splinesV2/limitderivative/30000/0/FanSpeed&src2=FanPower&src3=OATemp
+
+Now you get a FanSpeed30Second every 30 seconds, and everything else (including fan speed since it aligns every other occurrence) every minute, so you have additional entries every 30 seconds for fan speed.
+{
+"data": [
+{
+"FanPower": 0.4,
+"OATemp": 71.6044,
+"time": 1359814800000
+},
+{
+"FanPower": 0.4,
+"FanSpeed30Second": 40,
+"OATemp": 71.6044,
+"time": 1359814860000
+},
+{
+"FanSpeed30Second": 40,
+"time": 1359814890000
+},
+{
+"FanPower": 0.4,
+"FanSpeed30Second": 40,
+"OATemp": 71.6044,
+"time": 1359814920000
+},
+{
+"FanSpeed30Second": 40,
+"time": 1359814950000
+},
+
+It’s fresh and I’m still doing testing, but see if that gets you what you want.
+
+(copying Nick for future documentation purposes)
+
+Justin

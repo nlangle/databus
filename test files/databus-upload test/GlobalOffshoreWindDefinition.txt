@@ -1,0 +1,10 @@
+{"datasetType":"RELATIONAL_TABLE", 
+  "modelName":"GlobalOffshoreWind", 
+  "schema":"econnect",
+  "columns":[ 
+            {"name":"gid","dataType":"BigInteger","isIndex":true,"isPrimaryKey":true}, 
+            {"name":"gridcode","dataType":"BigInteger","isIndex":false,"isPrimaryKey":false}, 
+            {"name":"m_sec","dataType":"BigDecimal","isIndex":false,"isPrimaryKey":false}, 
+            {"name":"the_geom","dataType":"string","isIndex":false,"isPrimaryKey":false}
+            ] 
+}

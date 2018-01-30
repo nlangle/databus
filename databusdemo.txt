@@ -1,0 +1,145 @@
+
+topics:
+tables/streams
+databases/schemas
+permissions and groups
+
+
+
+Inserting Data:
+creating tables is a post:
+curl -X POST -w "\nRESULT CODE:%{http_code}\n" --insecure --header "Content-Type:application/json" --user jcollins:85A5PUPAE8.DBWEB1.VVXL9TWM1QPX -d @tableDef2.txt http://dbweb1:8080/api/registerV1
+payload:
+{"datasetType":"TIME_SERIES",
+  "modelName":"testtable1",
+  "schema":"perftest",
+  "createschema":true,
+  "columns":[
+            {"name":"time","dataType":"BigInteger","isIndex":true,"isPrimaryKey":true},
+            {"name":"value","dataType":"BigDecimal","isIndex":false,"isPrimaryKey":false}
+            ]
+}
+
+inserts are just a post:
+curl -X POST -w "\nRESULT CODE:%{http_code}\n" --insecure --header "Content-Type:application/json" --user jcollins:85A5PUPAE8.DBWEB1.VVXL9TWM1QPX --data-binary @1m.csv -o out.txt http://dbweb1:8080/api/postcsvV1/testtable1
+
+
+databus example urls:
+
+Raw Data
+Basic data access are http gets.
+
+Get the last 2000 points (raw data) as json:
+https://databus.nrel.gov/api/firstvaluesV1/2000/rawdataV1/bacnet20000AnalogInput1?reverse=true
+Same thing, but as csv:
+https://databus.nrel.gov/api/csv/firstvaluesV1/2000/rawdataV1/bacnet20000AnalogInput1?reverse=true
+
+
+Query a time range:
+This is all points (raw data) as json from 1/1/2014 to 2/1/2014
+https://databus.nrel.gov/api/rawdataV1/bacnet20000AnalogInput1/1388534400000/1391212800000
+The same thing, but as csv:
+https://databus.nrel.gov/api/csv/rawdataV1/bacnet20000AnalogInput1/1388534400000/1391212800000
+
+
+
+All dates (in and out) are in the form of 'epoch offset' anyone familiar with programming at all will be comfortable 
+with this.  For human readable conversions go to a site like http://www.epochconverter.com/
+
+If someone really insists on human readable output you can use the 'dateformat' mod:
+https://databus.nrel.gov/api/dateformatV1(dateFormat=dd-M-yyyy%20hh:mm:ss%20z)/firstvaluesV1/2000/rawdataV1/bacnet20000AnalogInput1?reverse=true
+Obviously that works for csv also:
+https://databus.nrel.gov/api/csv/dateformatV1(dateFormat=dd-M-yyyy%20hh:mm:ss%20z)/firstvaluesV1/2000/rawdataV1/bacnet20000AnalogInput1?reverse=true
+
+
+Mods
+Spline.  spline types include linear, real spline, limitderivitive spline. 
+raw data, only 138 values spaced randomly:
+https://databus.nrel.gov/api/rawdataV1/bacnet20000AnalogInput1/1416177470592/1416340475826
+
+spline it to minutely, notice 2714 values:
+https://databus.nrel.gov/api/splinesV2/limitderivative/60000/0/rawdataV1/bacnet20000AnalogInput1/1416177470592/1416340475826
+
+Range Clean:
+https://databus.nrel.gov/api/rangecleanV1/80/1000/rawdataV1/bacnet20000AnalogInput1/1416177470592/1416340475826
+
+
+
+
+Relational mod:
+simple:
+https://databus.nrel.gov/api/relational/value2=value*2/rawdataV1/bacnet20000AnalogInput1/1416177470592/1416340475826
+
+a bunch of others
+invert, multiply, 
+variability clean (this is terrible data for this mod):
+https://databus.nrel.gov/api/variabilitycleanV1/.01/rawdataV1/bacnet20000AnalogInput1/1416177470592/1416340475826
+
+Date Format:
+https://databus.nrel.gov/api/dateformatV1/firstvaluesV1/2000/rawdataV1/bacnet20000AnalogInput1?reverse=true
+or with format specified
+https://databus.nrel.gov/api/dateformatV1(dateFormat=dd-M-yyyy%20hh:mm:ss%20z)/firstvaluesV1/2000/rawdataV1/bacnet20000AnalogInput1?reverse=true
+
+
+
+aggregations:
+Aggregation data must be time aligned, AggregationPipe need not be.  Pipe mostly used for graphing.
+meta operations, list aggregations:
+https://databus.nrel.gov/api/sumstreamsV1/listaggregations/
+view a specific aggregation:
+https://databus.nrel.gov/api/sumstreamsV1/aggregation/RSF_LIGHTING_1M_WIDE
+
+
+just the sum:
+https://databus.nrel.gov/api/sumstreamsV1/RSF_LIGHTING_1M_WIDE/1358868711000/1358955111000
+
+include all values:
+https://databus.nrel.gov/api/aggregation/RSF_LIGHTING_1M_WIDE/1358868711000/1358955111000
+
+summarize columns (1 hour summaries):
+https://databus.nrel.gov/api/relationalsummaryV1(columnsToSummarize=D73937853phaseRealPower;D73947593phaseRealPower)/3600000/0/aggregation/RSF_LIGHTING_1M_WIDE/1358868711000/1358955111000
+
+
+more complex, mods and aggregations:
+
+Do mathematical operations with the relational operations mod:
+
+In addition to just returning many columns in the wide table, you can also do arbitrary operations on those columns using the relational operations mod:
+
+https://databus.nrel.gov/api/relational/DSum=D73937853phaseRealPower+D73947603phaseRealPower+D73937773phaseRealPower/aggregation/RSF_LIGHTING_1M_WIDE/1358868711000/1358955111000
+
+This call returns all the same stuff as above, but also adds in a new column named "DSum" which is the sum of just the components of the aggregation named "Dxxxxxx".
+
+You can do arbitrary and really complex stuff with this, it will have it's own section of documentation soon.  
+
+In addition to creating a new column with this functionality, you can also overwrite an existing columns value (which actually makes some of our old mods like 'multiplyV1' obsolete):
+
+https://databus.nrel.gov/api/relational/D73947603phaseRealPower=D73947603phaseRealPower*1000/aggregation/RSF_LIGHTING_1M_WIDE/1358868711000/1358955111000
+
+This replaces the value of D73947603phaseRealPower with D73947603phaseRealPower*1000
+You can do way, way more with this.
+
+
+Rename or filter out columns with the columnselect mod:
+Original data:
+https://databus.nrel.gov/api/aggregation/RSF_LIGHTING_1M_WIDE/1358868711000/1358955111000
+
+Sometimes you might have a wide table and want it to look like a narrow 'time'/'value' table.  You can use the columnselect mod to do this:
+https://databus.nrel.gov/api/columnselect/time,value/aggregation/RSF_LIGHTING_1M_WIDE/1358868711000/1358955111000
+
+This takes the output from above and makes it look like a simple time/value stream.
+
+
+You can also use this mod to 'rename' or alias columns:
+https://databus.nrel.gov/api/columnselect/time as starttime,value as sum/aggregation/RSF_LIGHTING_1M_WIDE/1358868711000/1358955111000 
+
+Or more properly 
+https://databus.nrel.gov/api/columnselect/time%20as%20starttime,value%20as%20sum/aggregation/RSF_LIGHTING_1M_WIDE/1358868711000/1358955111000
+
+As a correctly url encoded url.  This 'renames' the column 'time' as starttime and the column 'value' as sum.
+This is particularly useful if you want to take the output of a wide table and put it into the input of another mod with a 'time' or 'value' column that is not named 'time' or 'value':
+https://databus.nrel.gov/api/rangecleanV1/13000/14000/columnselect/time,D73937773phaseRealPower%20as%20value/aggregation/RSF_LIGHTING_1M_WIDE/1358868711000/1358955111000
+
+This uses our old rangeclean on a wide table using the D73937773phaseRealPower as the value for the rangeclean.
+
+

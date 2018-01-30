@@ -1,0 +1,9 @@
+{"datasetType":"RELATIONAL_TABLE",
+  "modelName":"recoverableCoal",
+  "schema":"yardstick",
+  "createschema":true,
+  "columns":[
+            {"name":"country","dataType":"string","isIndex":true,"isPrimaryKey":true},
+            {"name":"recoverable_coal_million_short_tons","dataType":"BigDecimal","isIndex":false,"isPrimaryKey":false}
+            ]
+}

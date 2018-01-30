@@ -1,0 +1,67 @@
+install notes
+
+this is wrong:
+http://www.datastax.com/documentation/cassandra/2.0/cassandra/install/installJreRHEL.html
+
+-states that java -version will return oracle jre, it returns oracle jdk
+-wait... configure to use jre - follow the code
+
+
+fresh start- after figuring some things out
+
+-#1 download cassandra tarball
+-see cassandra documentation - http://wiki.apache.org/cassandra/GettingStarted
+-provide links to download cassandra
+-install cassandra - fix alternate solutions section
+    -prereq - java 7
+    -check java -version http://www.datastax.com/documentation/cassandra/2.0/cassandra/install/installJreRHEL.html
+    -cassandra uses Oracle JRE, not JDK
+    -may need to update JRE to latest version and set java-home
+    -note for mac users, the java version from terminal is the jdk version, not the jre version.
+    -this will check jre version: /Library/Internet\ Plug-Ins/JavaAppletPlugin.plugin/Contents/Home/bin/java -version
+    -apple support thread: https://discussions.apple.com/thread/6527269
+    
+-#2 go to install directory
+    http://www.datastax.com/documentation/getting_started/doc/getting_started/gettingStartedTar_t.html
+
+-#3 installing w/o root permissions: http://www.datastax.com/documentation/getting_started/doc/getting_started/gettingStartedInstallTarNoSudo_t.html
+    -create new data & log directories
+    -edit yaml file
+    -edit log file
+    -start cassandra
+    -verify running
+-start cassandra
+-verify running
+
+-key cassandra concepts: http://www.datastax.com/documentation/getting_started/doc/getting_started/gsKeyConDataMdl.html#gsKeyConDataMdl__key-concepts
+
+-cassandra data model: http://www.datastax.com/documentation/getting_started/doc/getting_started/gsKeyConDataMdl.html#gsKeyConDataMdl__data-model
+
+-initialize a cluster:
+    -multiple node - single data center: http://www.datastax.com/documentation/cassandra/2.0/cassandra/initialize/initializeSingleDS.html
+    -multiple node - multiple data center: http://www.datastax.com/documentation/cassandra/2.0/cassandra/initialize/initializeMultipleDS.html
+    
+-starting and stopping cassandra cluster: http://www.datastax.com/docs/1.0/references/start_stop_ref
+    http://www.datastax.com/documentation/cassandra/1.2/cassandra/reference/referenceStopCprocess_t.html
+    -start bin/cassandra -f
+    -stop ps auwx | grep cassandra
+    -kill <pid>
+
+-configure cassandra for databus
+
+
+
+-get only latest version from github - download only recent version and not entire repository - shallow clone - git clone --depth n remote-url
+
+-application conf properties
+    app.conf
+        test envrinment
+    app.conf.prod
+        prod env
+        start script - may need to customize for your environment
+
+-if you dont want to use search set solr.mode = off (solr section)
+
+-single node is preferred method - move multi node text
+
+-install latest version of 2.0.x

@@ -1,0 +1,27 @@
+api testing:
+
+create a table-
+    this was successful
+    $sudo  curl -X POST -w "\nRESULT CODE:%{http_code}\n" --insecure --header "Content-Type:application/json" --user nlangle:84PAVWQJ6O.B1.E0GXEKS1TNXK -d @GlobalOffshoreWindDefinition.txt https://databus.nrel.gov/api/registerV1
+    
+    this was successful
+    curl -X POST -w "\nRESULT CODE:%{http_code}\n" --insecure --header "Content-Type:application/json" --user nlangle:84PAVWQJ6O.B1.E0GXEKS1TNXK -d @timeSeriesTest.txt https://databus.nrel.gov/api/registerV1
+    
+    
+    
+    
+    get data-
+    curl -i -H "Accept: application/json" -H "Content-Type: application/json" --user nlangle:84PAVWQJ6O.B1.E0GXEKS1TNXK  https://databus.nrel.gov/api/csv/firstvaluesV1/2000/rawdataV1/RaTemp?reverse=true
+    
+    get data and save it (CSV)- 
+    curl -i -H "Accept: application/json" -H "Content-Type: application/json" --user nlangle:84PAVWQJ6O.B1.E0GXEKS1TNXK  https://databus.nrel.gov/api/csv/firstvaluesV1/2000/rawdataV1/RaTemp?reverse=true > myGetTest.txt
+    
+    or this (JSON)--
+    curl -H "Accept: application/json" -H "Content-Type: application/json" --user nlangle:84PAVWQJ6O.B1.E0GXEKS1TNXK  https://databus.nrel.gov/api/firstvaluesV1/2000/rawdataV1/RaTemp?reverse=true -o "myGetTest.txt" -i
+    
+    
+    
+    sql-
+    http://localhost:9000/api/csv/firstvaluesV1/1000/getdataV1/select+*+from+wideTable+as+t
+        http://localhost:9000/api/getdataV1/select+*+from+wideTable+as+t+where+t.timeStart<1367911418000
+    where timeStart has to be the primary key for the table

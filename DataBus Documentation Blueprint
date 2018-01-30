@@ -1,0 +1,197 @@
+Databus Documentation Blueprint
+
+Databus or DataBus?
+
+*Introduction/Overview
+-databus abstract
+-understanding time series data
+    #http://www.stats.gla.ac.uk/steps/glossary/time_series.html#timeseries
+    #http://www.abs.gov.au/websitedbs/a3121120.nsf/home/statistical+language+-+time+series+data
+-why databus
+-key concepts (http://www.cs.berkeley.edu/~stevedh/smap2/intro.html#key-concepts)
+    collection and timeseries
+-architecture
+    what parts do what
+        what do vms do
+        what does cassandra do
+    cassandra configurations
+
+
+*Getting Started
+-Key Components
+    #Databases
+    #Tables
+    #Modules
+-user roles/types (section titled Accessing Databus from current doc)
+    #users
+    #robots
+        move current robot content
+    #user groups
+        move current user group content
+-first time user
+    #upload data (write data)
+    #read data
+
+
+*Installation & Configuration
+-DataBus Requirements (BS->Quickstart->Prerequisites)
+-Understanding Code Structure (BS->Quickstart->structure of code)
+-Installation Options (BS->Quickstart->#3-#6)
+    #Setting up DataBus w/ in-memory database w/o search support
+        EDIT: should not download entire GIT repository, instead get latest version
+    #Setting up DataBus w Cassandra on one node w/ search support
+    #Setting up DataBus w Cassandra cluster on 3 nodes w/ search support
+    #Modbus Installation
+
+    Recommended Option???
+
+-Provisioning DataBus (here?)
+
+
+*Data Specification
+-data model
+-data types
+    #relational
+    #time series
+    #relational time series (wide)
+-requirements for data
+-data naming and structure
+-data insight - how to extract meaning from raw data
+-data cleansing
+
+
+*Working with DataBus
+-Accessing DataBus
+    #UI
+    #API
+-Provisioning DataBus (or here?)
+    #Creating a DB
+    #Creating tables
+-Uploading (write) Data
+    #upload examples
+-Downloading (read) Data
+    #download examples
+-DataBus Modules
+    #list of modules
+    #relational modules(?)
+    
+-API Examples
+    #inserting data
+    #example urls
+    #time range
+    #modules
+        #csv
+        #json
+        #spline
+        #linear
+        #range clean
+        #standard deviation
+        #first values
+        #time average
+        #relational mod/simple
+        #invert
+        #multiply
+        #date format
+        #format specified
+        #aggregations
+        #sum
+        #all values
+        #summarize
+        #mathmatical examples
+        #rename columns
+        #filter out columns
+        #log
+    #dynamic aggregations
+    
+    Interpolation/Time alignment
+        #linear interpolation
+        #spline(v3)
+        #relational data summary
+    Rollup
+        #time average
+    Data Cleaning
+        #range clean
+    Aggregation
+        #sum stream
+        #aggregation
+        #aggregation (repeat?)
+        #aggregation pipe
+        #aggregation pipe (repeat?)
+    Data Source
+        #table data source
+        #wide time series
+    Math Operations
+        #invert
+        #multiply
+    Formatting
+        #line break
+        
+        
+
+
+-User Interface
+    #Dashboard
+    #My Databus
+    #My Groups
+    #System Summary
+    #Charting Interface 
+    #Data Streams
+    #Search
+    
+-Deleting
+    #delete a table
+    #delete a db
+
+
+-Cron Jobs
+    #set notifications/monitor (see TempoIQ examples https://developers.tempoiq.com/docs/html/guides/realtime-alerts.html)
+
+
+*Security
+-security features
+
+*Best Practices
+
+
+*Backup
+-backup process
+-recovery process
+-offline backup to tape?
+
+
+*Version History/Release Notes
+
+
+*FAQ
+-How to discover the API key needed for table creation in the Provisioning Databus demo?
+-How do I install the latest Non-commercial version and activate it on Databus?
+-check community q&a
+
+
+*developer (?)
+-3rd party api
+-in-memory
+-gradle test
+-code structure
+
+
+*Source
+-github link
+
+*Support
+-OpenEI community
+
+
+sources & examples:
+buffalosw.com
+http://www.cs.berkeley.edu/
+http://influxdb.com/
+http://ryandaigle.com/
+http://opentsdb.net/
+https://www.mapr.com
+https://developers.tempoiq.co
+http://planetcassandra.org/
+http://www.timeseries.guru/
+
+
+

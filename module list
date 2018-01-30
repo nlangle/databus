@@ -1,0 +1,74 @@
+#modules
+data source
+    #table data source
+    #wide time series
+
+data format
+    #csv
+    #json
+
+date format
+    #date format
+
+duration?
+range and order?
+Select Limit
+    #query a time range
+    #first values
+    
+Data formatting
+    #column select (rename/filter out)
+        https://databus.nrel.gov/api/columnselect/energy,timeStart/getdataV1/select+t+from+tableName+as+t
+    #line break
+    
+Rollup
+    A roll-up involves summarizing the data along a dimension. 
+    #time average
+   
+Data Cleaning
+    #range clean
+    #variability clean
+   
+Interpolation/Time alignment
+    #linear interpolation
+    #spline(v3)
+    #relational data summary
+
+Math Operations
+    #relational
+        add/subtract/multiply/division (instructions for divide symbol)
+    #invert
+    #standard deviation
+    
+Aggregation
+    POST create/modify aggregation
+    GET data from aggregation
+    VIEW all aggregations
+        https://databus.nrel.gov/api/sumstreamsV1/listaggregations/
+    VIEW specific aggregation
+    DELETE aggregation
+    #sum stream
+    #aggregation
+    #aggregation pipe
+    #relational summary
+
+example of maths and aggregations combined
+
+Dynamic Aggregation
+    #dynamic aggregation
+    #dynamic aggregation pipe
+    
+Log Data
+    #log
+    
+
+        
+
+    
+
+
+
+
+
+    Formatting
+        #line break

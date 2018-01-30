@@ -1,0 +1,1 @@
+ {"name":"AGG_TEST","group":"testone","urls":["timeaverage/60000/rangeclean/-10/60/rawdataV1/RaTemp"]}

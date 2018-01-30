@@ -1,0 +1,112 @@
+DATABUS 
+
+1. marketing level overview (/analysis/databus)
+    -NREL analysis page 
+2. OpenEI
+3. offline help
+    -buffalo software
+    -installation & configuration
+    -architecute doc (justin will write up)
+    -include online help, in examples replace username & api key w/ generic version
+            curl... (username):(api key)
+            curl... (jcollins):(1234)
+            https://databus.nrel.gov/...
+4. online help
+
+
+What is DataBus?
+-intro level description to #3
+
+*OFFLINE HELP (#3 Buffalo)
+-quick start 4 is incomplete
+-do either 3 or 4, these are discrete and would never be done together, do one or the other
+-3 should not download entire GIT repository, get latest version instead
+
+
+set up g-chat
+
+document examples
+-provide generic example 
+-follow up with actual example
+
+
+can reorder online help (databus.nrel.gov/help) as needed
+
+no mention of user interface/dashboard in documentation
+
+*data streams
+-intervals in ms
+-can always go back
+    can always copy url and modify
+-document all different types of fields that can be edited
+
+
+*search on user interface
+    -ask justin when i get here
+    -elastic search --> solr
+
+*security is not documented 
+
+
+*check out groups
+
+
+*TEST existing documentation to see if it is actually accurate
+
+
+
+
+-post data v1 useful for posting data across multiple tables
+each line includes table name and data that goes into it
+one post with diverse data across diverse tables
+data from 1000s of sensors and 500 post to 500 different tables all at once - this theoretically could use up all the memory - 
+however, it is not as fast as new bulk method - to single table
+-if uploading billion points to a single table use new method get doc from Justin
+
+*CRON jobs probably not documented at all
+-set notifications/monitor
+-cron jobs can be set to append data to a specified table every n amount of time
+-id is a trigger
+-url to call
+    any url...
+    -/logV1
+    -/table name
+    -/stuff to run 
+    
+    
+    
+*triggers (not implemented)
+
+
+
+
+-relational table (arbitrary values, not time values necisarily, classic db table, rows/columns, booleans, etc.)
+    name    job     title       location
+    justin engineer    mr      rsf
+    nick    developer   mr      rsf
+-time series
+    time(ms)    value 
+    1234567     1.1
+    1234568     1.2
+    1234575     1.5
+-relational time series (wide time series)
+    add description of what it is
+    
+    time        value1      value2      value3      heat
+    123         1.1         1000        0           72º
+    
+    
+    
+    
+    
+    ---
+    1.26.15
+    
+    how cassandra is structured and configured
+    
+    see examples from Smap
+    
+    who are the users?
+    -does this go into documentation?
+    
+    
